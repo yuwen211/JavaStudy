@@ -1,0 +1,9 @@
+1.JDK(Java Development Kit    Java开发工具包)
+     >JDK是提供给Java开发人员使用的，其中包含了java的开发工具，也包括了JRE。所以安装了JDK，就不用在单独安装JRE了。
+
+2.JRE(Java Runtime Environment    Java运行环境)
+     >JRE包括Java虚拟机(JVM Java Virtual Machine)和Java程序所需的核心类库等，如果想要运行一个开发好的Java程序，计算机中只需要安装JRE即可。
+
+3.JDK、JRE、JVM关系
+      >JDK = JRE + 开发工具集（例如Javac编译工具等）
+      >JRE = JVM + Java SE标准类库
