@@ -1,0 +1,501 @@
+1.流程控制语句是用来控制程序中各语句执行顺序的语句，可以把语句组合成能完成一定功能的小逻辑模块。
+
+2.其流程控制方式采用结构化程序设计中规定的三种基本流程结构，即：
+      >顺序结构
+      >分支结构
+      >循环结构
+
+
+3.顺序结构
+     程序从上到下逐行地执行，中间没有任何判断和跳转。
+
+
+4.分支结构之一：if-else结构
+     >if语句三种格式：
+         (1)if(条件表达式){
+                执行代码块;
+            }
+         
+         (2)if(条件表达式){
+                执行代码块1;
+            }else{
+                执行代码块2;
+            }
+          
+          (3)if(条件表达式1){
+                 执行代码块1;
+             }else if(条件表达式2){
+                 执行代码块2;
+             }
+             ......
+             else{
+                 执行代码块n;
+             }
+              
+     >if-else使用说明:
+          (1)条件表达式必须是布尔表达式（关系表达式或逻辑表达式）、布尔变量
+          (2)语句块只有一条执行语句时，一对{}可以省略，但建议保留
+          (3)if-else语句结构，根据需要可以嵌套使用
+          (4)当if-else结构是“多选一”时，最后的else是可选的，根据需要可以省略
+          (5)针对于条件表达式：
+                 > 如果多个条件表达式之间是“互斥”关系(或没有交集的关系),哪个判断和执行语句声明在上面还是下面，无所谓。
+                 > 如果多个条件表达式之间有交集的关系，需要根据实际情况，考虑清楚应该将哪个结构声明在上面。
+                 > 如果多个条件表达式之间有包含的关系，通常情况下，需要将范围小的声明在范围大的上面。否则，范围小的就没机会执行了。
+
+
+5.分支结构之二：switch-case结构
+(1)格式
+switch(表达式){
+case 常量1:
+	执行语句1;
+	//break;
+
+case 常量2:
+	执行语句2;
+	//break;
+
+...
+
+default:
+	执行语句n;
+	//break;
+
+}
+
+(2)说明：
+① 根据switch表达式中的值，依次匹配各个case中的常量。一旦匹配成功，则进入相应case结构中，调用其执行语句。
+  当调用完执行语句以后，则仍然继续向下执行其他case结构中的执行语句，直到遇到break关键字或此switch-case结构末尾结束为止。
+  如果switch-case结构中的多个case的执行语句相同，则可以考虑进行合并。
+
+② break,可以使用在switch-case结构中，表示一旦执行到此关键字，就跳出switch-case结构。break关键字是可选的。
+
+③ switch结构中的表达式，只能是如下的6种数据类型之一：
+   byte 、short、char、int、枚举类型(JDK5.0新增)、String类型(JDK7.0新增)
+
+④case子句中的值必须是常量，不能是变量名或不确定的表达式值；case 之后只能声明常量。不能声明范围。
+
+⑤ default:相当于if-else结构中的else.  
+  default结构是可选的，而且位置是灵活的。
+
+⑥ 凡是可以使用switch-case的结构，都可以转换为if-else。反之，不成立。
+  写分支结构时，当发现既可以使用switch-case,（同时，switch中表达式的取值情况不太多），又可以使用if-else时，我们优先选择使用switch-case。原因：switch-case执行效率稍高。
+
+class SwitchCaseTest {
+	public static void main(String[] args) {
+		
+		int number = 5;
+		switch(number){
+		
+		case 0:
+			System.out.println("zero");
+			break;
+		case 1:
+			System.out.println("one");
+			break;
+		case 2:
+			System.out.println("two");
+			break;
+		case 3:
+			System.out.println("three");
+			break;
+		default:
+			System.out.println("other");
+			//break;
+		}
+
+
+		String season = "summer";
+		switch (season) {
+		case "spring":
+			System.out.println("春暖花开");
+			break;
+		case "summer":
+			System.out.println("夏日炎炎");
+			break;
+		case "autumn":
+			System.out.println("秋高气爽");
+			break;
+		case "winter":
+			System.out.println("冬雪皑皑");
+			break;
+		default:
+			System.out.println("季节输入有误");
+			break;
+		}
+
+
+
+		//**************如下的两种情况都编译不通过*********************
+		//情况一
+		/*
+		boolean isHandsome = true;
+		switch(isHandsome){
+		
+		case true:
+			System.out.println("我好帅啊~~~");
+			break;
+		case false:
+			System.out.println("我好丑啊~~~");
+			break;
+		default:
+			System.out.println("输入有误~~~");
+		}
+		*/
+		//情况二
+		/*
+		int age = 10;
+		switch(age){
+		case age > 18:
+			System.out.println("成年了");
+			break;
+		default:
+			System.out.println("未成年");
+		}
+		*/
+	}
+}
+
+
+
+6.循环结构：在某些条件满足的情况下，反复执行特定代码的功能。
+     >循环语句分类
+         (1)for 循环
+         (2)while 循环
+         (3)do-while 循环
+      
+     >循环语句的四个组成部分
+         (1)初始化部分(init_statement)
+         (2)循环条件部分(test_exp)
+         (3)循环体部分(body_statement)
+         (4)迭代部分(alter_statement) 
+
+
+7.循环结构之一：for循环结构
+    >循环结构的4个要素
+         ① 初始化条件
+         ② 循环条件  --->是boolean类型
+         ③ 循环体
+         ④ 迭代条件
+
+    >for循环的结构
+
+        for(①初始化部分;②循环条件部分;④迭代部分){
+	     ③循环体部分;
+        }
+
+       执行过程：① - ② - ③ - ④ - ② - ③ - ④ - ... - ②
+
+      >说明：
+            ②循环条件部分为boolean类型表达式，当值为false时，退出循环
+            ①初始化部分可以声明多个变量，但必须是同一个类型，用逗号分隔
+            ④可以有多个变量更新，用逗号分隔
+
+class ForTest {
+	public static void main(String[] args) {
+
+		/*
+		System.out.println("Hello World!");
+		System.out.println("Hello World!");
+		System.out.println("Hello World!");
+		System.out.println("Hello World!");
+		System.out.println("Hello World!");
+		*/
+
+		for(int i = 1;i <= 5;i++){//i:1,2,3,4,5
+			System.out.println("Hello World!");
+		}
+		//i:在for循环内有效。出了for循环就失效了。
+		//System.out.println(i);
+		
+		//练习：
+		int num = 1;
+		for(System.out.print('a');num <= 3;System.out.print('c'),num++){
+			System.out.print('b');
+		}
+		//输出结果：abcbcbc
+
+		System.out.println();
+
+		//例题：遍历100以内的偶数,输出所有偶数的和,输出偶数的个数
+		int sum = 0;//记录所有偶数的和
+		int count = 0;//记录偶数的个数
+		for(int i = 1;i <= 100;i++){
+			
+			if(i % 2 == 0){
+				System.out.println(i);
+				sum += i;
+				count++;
+			}
+			//System.out.println("总和为：" + sum);
+		}
+
+		System.out.println("总和为：" + sum);
+		System.out.println("个数为：" + count);
+
+	}
+}
+
+
+
+8.循环结构之二：while循环
+     >循环结构的4个要素
+          ① 初始化条件
+          ② 循环条件  --->是boolean类型
+          ③ 循环体
+          ④ 迭代条件
+
+     >while循环的结构
+
+         ①初始化部分
+         while(②循环条件部分){
+	    ③循环部分;
+	    ④迭代部分;
+         }
+
+         执行过程：① - ② - ③ - ④ - ② - ③ - ④ - ... - ②
+
+      >说明：
+          (1)写while循环千万小心不要丢了迭代条件。一旦丢了，就可能导致死循环！
+          (2)我们写程序，要避免出现死循环。
+          (3)for循环和while循环是可以相互转换的！ 
+          区别：for循环和while循环的初始化条件部分的作用范围不同。
+
+class  WhileTest{
+	public static void main(String[] args) {
+		
+		//遍历100以内的所有偶数
+		int i = 1;
+		while(i <= 100){
+			
+			if(i % 2 == 0){
+				System.out.println(i);
+			}
+			
+			i++;
+		}
+		//出了while循环以后，仍可以调用。
+		System.out.println(i);//101
+
+	}
+}
+
+
+
+9.循环结构之三：do-while循环
+      >循环结构的4个要素
+           ① 初始化条件
+           ② 循环条件  --->是boolean类型
+           ③ 循环体
+           ④ 迭代条件
+
+      >do-while循环结构：
+
+           ①初始化部分
+           do{
+	        ③循环体部分;
+	        ④迭代部分;
+
+           }while(②循环条件部分);
+
+           执行过程：① - ③ - ④ - ② - ③ - ④ - ... - ②
+
+       >说明：
+           (1)do-while循环至少会执行一次循环体！
+           (2)开发中，使用for和while更多一些。较少使用do-while
+
+class DoWhileTest {
+	public static void main(String[] args) {
+		
+		//遍历100以内的偶数,并计算所有偶数的和及偶数的个数
+		int num = 1;
+		int sum = 0;//记录总和
+		int count = 0;//记录个数
+		do{
+			
+			if(num % 2 == 0){
+				System.out.println(num);
+				sum += num;
+				count++;
+			}
+
+			num++;
+
+		}while(num <= 100);
+		
+
+		System.out.println("总和为：" + sum);
+		System.out.println("个数为：" + count);
+
+		//*************体会do-while至少执行一次循环体***************
+		int number1 = 10;
+		while(number1 > 10){
+			System.out.println("hello:while");
+			number1--;
+		}
+
+		int number2 = 10;
+		do{
+			System.out.println("hello:do-while");
+			number2--;
+		}while(number2 > 10);
+
+	}
+}
+
+
+
+10.嵌套循环结构
+     (1)嵌套循环：将一个循环结构A声明在另一个循环结构B的循环体中,就构成了嵌套循环
+
+     (2)外层循环：循环结构B。内层循环：循环结构A
+
+     (3)说明
+          ① 内层循环结构遍历一遍，只相当于外层循环循环体执行了一次
+          ② 假设外层循环需要执行m次，内层循环需要执行n次。此时内层循环的循环体一共执行了m * n次
+
+     (4)技巧：外层循环控制行数，内层循环控制列数
+
+class ForForTest {
+	public static void main(String[] args) {
+		
+		//******
+		//System.out.println("******");
+		for(int i = 1;i <= 6;i++){
+			System.out.print('*');
+		}
+
+		System.out.println("\n");
+
+		/*
+		******
+		******
+		******
+		******
+		*/
+		for(int j = 1;j <= 4;j++ ){
+			for(int i = 1;i <= 6;i++){
+				System.out.print('*');
+			}
+			System.out.println();
+		}
+
+		/*			i(行号)		j(*的个数)
+		*			1			1
+		**			2			2
+		***			3			3
+		****		4			4
+		*****		5			5
+		*/
+
+		for(int i = 1;i <= 5;i++){//控制行数
+			for(int j = 1;j <= i;j++){//控制列数
+				System.out.print("*");
+			
+			}
+			System.out.println();
+		}
+		
+		/*			i(行号)		j(*的个数)   规律：i + j = 5 换句话说：j = 5 - i;
+		****		1			4
+		***			2			3
+		**			3			2
+		*			4			1
+		*/	
+
+		for(int i = 1;i <= 4;i++){
+			for(int j = 1;j <= 5 - i;j++){
+				System.out.print("*");	
+			}
+			System.out.println();
+		}
+
+		/*
+		*
+		**
+		***
+		****
+		*****
+		****
+		***
+		**
+		*
+		*/
+
+		//略
+
+/*
+
+----* 
+---* * 
+--* * * 
+-* * * * 
+* * * * * 
+ * * * * 
+  * * * 
+   * * 
+    * 
+
+*/
+
+	//上半部分
+
+
+	//下半部分
+		
+	}
+}
+
+
+
+11.break和continue关键字的使用
+
+			使用范围			循环中使用的作用(不同点)		            相同点
+break:			switch-case结构和			
+			循环结构中		        结束当前循环					关键字后面不能声明执行语句	
+
+continue:		循环结构中			结束当次循环					关键字后面不能声明执行语句
+
+
+class BreakContinueTest {
+	public static void main(String[] args) {
+
+		for(int i = 1;i <= 10;i++){
+		
+			if(i % 4 == 0){
+				break;//123
+				//continue;//123567910
+				//System.out.println("今晚迪丽热巴要约我！！！");
+			}
+			System.out.print(i);
+		}
+
+		System.out.println("\n");
+		//******************************
+		
+		label:for(int i = 1;i <= 4;i++){
+		
+			for(int j = 1;j <= 10;j++){
+				
+				if(j % 4 == 0){
+					//break;//默认跳出包裹此关键字最近的一层循环。
+					//continue;
+
+					//break label;//结束指定标识的一层循环结构
+					continue label;//结束指定标识的一层循环结构当次循环
+				}
+				
+				System.out.print(j);
+			}
+			
+			System.out.println();
+		}
+	}
+}
+
+
+
+12.说明：
+      (1)不在循环条件部分限制次数的结构：for(;;) 或 while(true)
+      (2)结束循环有几种方式？
+             方式一：循环条件部分返回false
+	     方式二：在循环体中，执行break
