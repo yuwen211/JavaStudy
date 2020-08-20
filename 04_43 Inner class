@@ -1,0 +1,203 @@
+类的成员之五：内部类
+
+1. 当一个事物的内部，还有一个部分需要一个完整的结构进行描述，而这个内部的完整的结构又只为外部事物提供服务，那么整个内部的完整结构最好使用内部类。
+
+2.在Java中，允许一个类的定义位于另一个类的内部，前者称为内部类，后者称为外部类。
+
+3. Inner class一般用在定义它的类或语句块之内，在外部引用它时必须给出完整的名称。
+       Inner class的名字不能与包含它的外部类类名相同；
+
+4.分类： 
+     >成员内部类（static成员内部类和非static成员内部类）
+     >局部内部类（不谈修饰符）、匿名内部类
+
+5.成员内部类作为类的成员的角色：
+     >和外部类不同，Inner class还可以声明为private或protected；
+     >可以调用外部类的结构
+     >Inner class 可以声明为static的，但此时就不能再使用外层类的非static的成员变量；
+
+6.成员内部类作为类的角色：
+     >可以在内部定义属性、方法、构造器等结构
+     >可以声明为abstract类 ，因此可以被其它的内部类继承
+     >可以声明为final的
+     >编译以后生成OuterClass$InnerClass.class字节码文件（也适用于局部内部类）
+
+7.注意：
+     (1)非static的成员内部类中的成员不能声明为static的，只有在外部类或static的成员内部类中才可声明static成员。
+     (2)外部类访问成员内部类的成员，需要“内部类.成员”或“内部类对象.成员”的方式
+     (3)成员内部类可以直接使用外部类的所有成员，包括私有的数据
+     (4)当想要在外部类的静态成员部分使用内部类时，可以考虑内部类声明为静态的
+
+8.如何使用局部内部类
+     >只能在声明它的方法或代码块中使用，而且是先声明后使用。除此之外的任何地方都不能使用该类
+     >但是它的对象可以通过外部方法的返回值返回使用，返回值类型只能是局部内部类的父类或父接口类型
+
+9.局部内部类的特点
+     >内部类仍然是一个独立的类，在编译之后内部类会被编译成独立的.class文件，但是前面冠以外部类的类名和$符号，以及数字编号。
+     >只能在声明它的方法或代码块中使用，而且是先声明后使用。除此之外的任何地方都不能使用该类。
+     >局部内部类可以使用外部类的成员，包括私有的。
+     >局部内部类可以使用外部方法的局部变量，但是必须是final的。由局部内部类和局部变量的声明周期不同所致。
+     >局部内部类和局部变量地位类似，不能使用public,protected,缺省,private
+     >局部内部类不能使用static修饰，因此也不能包含静态成员
+
+10.匿名内部类
+      (1)匿名内部类不能定义任何静态成员、方法和类，只能创建匿名内部类的一个实例。一个匿名内部类一定是在new的后面，用其隐含实现一个接口或实现一个类。
+      (2)匿名内部类的特点：
+            >匿名内部类必须继承父类或实现接口
+            >匿名内部类只能有一个对象
+            >匿名内部类对象只能使用多态形式引用
+
+
+
+/*
+ * 类的内部成员之五：内部类
+ * 1. Java中允许将一个类A声明在另一个类B中，则类A就是内部类，类B称为外部类
+ * 
+ * 2.内部类的分类：成员内部类（静态、非静态）  vs 局部内部类(方法内、代码块内、构造器内)
+ * 
+ * 3.成员内部类：
+ * 		一方面，作为外部类的成员：
+ * 			>调用外部类的结构
+ * 			>可以被static修饰
+ * 			>可以被4种不同的权限修饰
+ * 
+ * 		另一方面，作为一个类：
+ * 			> 类内可以定义属性、方法、构造器等
+ * 			> 可以被final修饰，表示此类不能被继承。言外之意，不使用final，就可以被继承
+ * 			> 可以被abstract修饰
+ * 
+ * 
+ * 4.关注如下的3个问题
+ *   4.1 如何实例化成员内部类的对象
+ *   4.2 如何在成员内部类中区分调用外部类的结构
+ *   4.3 开发中局部内部类的使用  
+ * 
+ */
+public class InnerClassTest {
+	public static void main(String[] args) {
+		
+		//创建Dog实例(静态的成员内部类):
+		Person.Dog dog = new Person.Dog();
+		dog.show();
+		//创建Bird实例(非静态的成员内部类):
+//		Person.Bird bird = new Person.Bird();//错误的
+		Person p = new Person();
+		Person.Bird bird = p.new Bird();
+		bird.sing();
+		
+		System.out.println();
+		
+		bird.display("黄鹂");
+		
+	}
+}
+
+class Person{
+	
+	String name = "小明";
+	int age;
+	
+	public void eat(){
+		System.out.println("人：吃饭");
+	}
+	
+	
+	//静态成员内部类
+	static class Dog{
+		String name;
+		int age;
+		
+		public void show(){
+			System.out.println("卡拉是条狗");
+//			eat();
+		}
+		
+	}
+	//非静态成员内部类
+	class Bird{
+		String name = "杜鹃";
+		
+		public Bird(){
+			
+		}
+		
+		public void sing(){
+			System.out.println("我是一只小小鸟");
+			Person.this.eat();//调用外部类的非静态属性
+			eat();
+			System.out.println(age);
+		}
+		
+		public void display(String name){
+			System.out.println(name);//方法的形参
+			System.out.println(this.name);//内部类的属性
+			System.out.println(Person.this.name);//外部类的属性
+		}
+	}
+	
+	
+	public void method(){
+		//局部内部类
+		class AA{
+			
+		}
+	}
+	
+	{
+		//局部内部类
+		class BB{
+			
+		}
+	}
+	
+	public Person(){
+		//局部内部类
+		class CC{
+			
+		}
+	}	
+}
+
+
+//开发中局部内部类的使用
+public class InnerClassTest1 {
+	
+	
+	//开发中很少见
+	public void method(){
+		//局部内部类
+		class AA{
+			
+		}
+	}
+	
+	
+	//返回一个实现了Comparable接口的类的对象
+	public Comparable getComparable(){
+		
+		//创建一个实现了Comparable接口的类:局部内部类
+		//方式一：
+//		class MyComparable implements Comparable{
+//
+//			@Override
+//			public int compareTo(Object o) {
+//				return 0;
+//			}
+//			
+//		}
+//		
+//		return new MyComparable();
+		
+		//方式二：
+		return new Comparable(){
+
+			@Override
+			public int compareTo(Object o) {
+				return 0;
+			}
+			
+		};
+		
+	}
+	
+}
