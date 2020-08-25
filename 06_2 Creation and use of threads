@@ -1,0 +1,131 @@
+二、线程的创建和使用
+
+1. API中创建线程的两种方式：
+     JDK1.5之前创建新执行线程有两种方法：
+        (1)继承Thread类的方式
+        (2)实现Runnable接口的方式
+
+
+2. 方式一：继承Thread类
+      (1)定义子类继承Thread类。
+      (2)子类中重写Thread类中的run方法。
+      (3)创建Thread子类对象，即创建了线程对象。
+      (4)调用线程对象start方法：启动线程，调用run方法。
+
+/**
+ * 多线程的创建，方式一：继承于Thread类
+ * 1. 创建一个继承于Thread类的子类
+ * 2. 重写Thread类的run() --> 将此线程执行的操作声明在run()中
+ * 3. 创建Thread类的子类的对象
+ * 4. 通过此对象调用start()
+ * <p>
+ * 例子：遍历100以内的所有的偶数
+ */
+
+//1. 创建一个继承于Thread类的子类
+class MyThread extends Thread {
+    //2. 重写Thread类的run()
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) {
+            if(i % 2 == 0){
+                System.out.println(Thread.currentThread().getName() + ":" + i);
+            }
+        }
+    }
+}
+
+public class ThreadTest {
+    public static void main(String[] args) {
+        //3. 创建Thread类的子类的对象
+        MyThread t1 = new MyThread();
+
+        //4.通过此对象调用start():①启动当前线程 ② 调用当前线程的run()
+        t1.start();
+        //问题一：我们不能通过直接调用run()的方式启动线程。
+//        t1.run();
+
+        //问题二：再启动一个线程，遍历100以内的偶数。不可以还让已经start()的线程去执行。会报IllegalThreadStateException
+//        t1.start();
+        //我们需要重新创建一个线程的对象
+        MyThread t2 = new MyThread();
+        t2.start();
+
+        //如下操作仍然是在main线程中执行的。
+        for (int i = 0; i < 100; i++) {
+            if(i % 2 == 0){
+                System.out.println(Thread.currentThread().getName() + ":" + i + "***********main()************");
+            }
+        }
+    }
+}
+
+
+
+3. 方式二：实现Runnable接口
+      (1)定义子类，实现Runnable接口。
+      (2)子类中重写Runnable接口中的run方法。
+      (3)通过Thread类含参构造器创建线程对象。
+      (4)将Runnable接口的子类对象作为实际参数传递给Thread类的构造器中。
+      (5)调用Thread类的start方法：开启线程，调用Runnable子类接口的run方法。
+
+/**
+ * 创建多线程的方式二：实现Runnable接口
+ * 1. 创建一个实现了Runnable接口的类
+ * 2. 实现类去实现Runnable中的抽象方法：run()
+ * 3. 创建实现类的对象
+ * 4. 将此对象作为参数传递到Thread类的构造器中，创建Thread类的对象
+ * 5. 通过Thread类的对象调用start()
+ *
+ */
+//1. 创建一个实现了Runnable接口的类
+class MThread implements Runnable{
+
+    //2. 实现类去实现Runnable中的抽象方法：run()
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) {
+            if(i % 2 == 0){
+                System.out.println(Thread.currentThread().getName() + ":" + i);
+            }
+
+        }
+    }
+}
+
+
+public class ThreadTest1 {
+    public static void main(String[] args) {
+        //3. 创建实现类的对象
+        MThread mThread = new MThread();
+        //4. 将此对象作为参数传递到Thread类的构造器中，创建Thread类的对象
+        Thread t1 = new Thread(mThread);
+        t1.setName("线程1");
+        //5. 通过Thread类的对象调用start():① 启动线程 ②调用当前线程的run()-->调用了Runnable类型的target的run()
+        t1.start();
+
+        //再启动一个线程，遍历100以内的偶数
+        Thread t2 = new Thread(mThread);
+        t2.setName("线程2");
+        t2.start();
+    }
+}
+
+
+
+4. 继承方式和实现方式的联系与区别
+     public class Thread extends Object implements Runnable
+     (1)区别
+          >继承Thread：线程代码存放Thread子类run方法中。
+          >实现Runnable：线程代码存在接口的子类的run方法。
+     (2)实现方式的好处
+          >避免了单继承的局限性
+          >多个线程可以共享同一个接口实现类的对象，非常适合多个相同线程来处理同一份资源。
+     
+5. 比较创建线程的两种方式。
+ * 开发中：优先选择：实现Runnable接口的方式
+ * 原因：1. 实现的方式没有类的单继承性的局限性
+ *      2. 实现的方式更适合来处理多个线程有共享数据的情况。
+ *
+ * 联系：public class Thread implements Runnable
+ * 相同点：两种方式都需要重写run(),将线程要执行的逻辑声明在run()中。
